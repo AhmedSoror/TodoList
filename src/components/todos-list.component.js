@@ -12,7 +12,11 @@ const Todo= props=>(
                 <button type="button" className="btn btn-primary" style={{marginRight:5}}>
                     <Link to={"/edit/"+props.todo._id} style={{color:'white'}}>Edit</Link>
                 </button>
-                <button type="button" className="btn btn-danger">Delete</button>
+                <button type="button" className="btn btn-danger" onClick={()=>{
+                    axios.delete('http://localhost:4000/todos/delete/'+props.todo._id);                   
+                }}>
+                    Delete
+                </button>
         </td>
     </tr>
 )
