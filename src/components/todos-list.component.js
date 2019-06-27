@@ -2,6 +2,8 @@ import React,{Component} from 'react';
 import {Link} from "react-router-dom";
 import axios from 'axios';
 
+
+  
 const Todo= props=>(
     <tr className={props.todo.todo_completed?'completed':''}>
         <td>{props.todo.todo_description}</td>
@@ -17,6 +19,24 @@ const Todo= props=>(
                 }}>
                     Delete
                 </button>
+                
+        </td>
+        <td>
+        <div className="form-check">
+              <button className="btn btn-primary" 
+                        onClick={()=>{
+                                
+                            axios.post("http://localhost:4000/todos/update/" + props.todo._id, {
+                                todo_description: props.todo.todo_description,
+                                todo_responsible: props.todo.todo_responsible,
+                                todo_priority: props.todo.todo_priority,
+                                todo_completed: !props.todo.todo_completed
+                            }
+                            ).then(res => console.log(res.data))}
+
+                        }
+            >{!props.todo.todo_completed?"Done":"Not Yet"} </button>
+            </div>
         </td>
     </tr>
 )
@@ -45,9 +65,16 @@ export default class TodosList extends Component{
             })
 
     }
+
+    onChangeTodoCompleted(e) {
+        this.setState({
+          todo_completed: !this.state.todo_completed
+        });
+      }
+
     todosList(){
         return this.state.todos.map((currentTodo,i)=>{
-            return <Todo todo={currentTodo} key={i}/>
+            return <Todo todo={currentTodo} key={i} onChangeTodoCompleted={this.onChangeTodoCompleted}/>
         })        
     }
 
@@ -62,6 +89,7 @@ export default class TodosList extends Component{
                             <th>Responsible</th>
                             <th>Priority</th>
                             <th style={{paddingLeft:30}}>Actions</th>
+                            <th style={{paddingLeft:30}}>Completed</th>
 
                         </tr>
                     </thead>
